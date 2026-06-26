@@ -1,14 +1,82 @@
-<!DOCTYPE html>
-<html><body>
-  <input id="msg" placeholder="Tanya apa aja">
-  <button onclick="send()">Send</button>
-  <div id="out"></div>
+<!<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Awa AI</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d0d0d;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 700px;
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 0 20px rgba(106,90,205,0.2);
+    }
+    h2 { text-align: center; color: #a78bfa; margin-bottom: 20px; }
+    .chat-box {
+      min-height: 400px;
+      background: #111;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      overflow-y: auto;
+    }
+    .input-area { display: flex; gap: 10px; }
+    input {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: #222;
+      color: #eee;
+      font-size: 16px;
+    }
+    button {
+      padding: 14px 20px;
+      border-radius: 10px;
+      border: none;
+      background: #7c3aed;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #8b5cf6; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Awa AI ✨</h2>
+    <div id="chat" class="chat-box">Halo, ada yg bisa dibantu?</div>
+    <div class="input-area">
+      <input id="msg" placeholder="Tanya apa aja..." onkeypress="if(event.key==='Enter')send()">
+      <button onclick="send()">Send</button>
+    </div>
+  </div>
   <script>
   async function send(){
-    const m = document.getElementById('msg').value;
+    const input = document.getElementById('msg');
+    const chat = document.getElementById('chat');
+    const m = input.value;
+    if(!m) return;
+    chat.innerHTML += `<p><b>Kamu:</b> ${m}</p>`;
+    chat.innerHTML += `<p><b>AI:</b> Loading...</p>`;
+    input.value = '';
     const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:m})});
     const d = await r.json();
-    document.getElementById('out').innerText = d.reply;
+    chat.lastChild.innerHTML = `<b>AI:</b> ${d.reply || 'Error'}`;
+    chat.scrollTop = chat.scrollHeight;
   }
   </script>
-</body></html>
+</body>
+</html>
