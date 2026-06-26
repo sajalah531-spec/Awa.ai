@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><body>
+  <input id="msg" placeholder="Tanya apa aja">
+  <button onclick="send()">Send</button>
+  <div id="out"></div>
+  <script>
+  async function send(){
+    const m = document.getElementById('msg').value;
+    const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:m})});
+    const d = await r.json();
+    document.getElementById('out').innerText = d.reply;
+  }
+  </script>
+</body></html>
